@@ -200,61 +200,71 @@ namespace NMaier.SimpleDlna.FileMediaServer
 
     internal Cover MaybeGetCover(BaseFile file)
     {
-      if (connection == null) {
-        return null;
-      }
+      // TODO: refactor to remove BinaryFormatter
+      throw new NotImplementedException();
 
-      var info = file.Item;
-      byte[] data;
-      lock (connection) {
-        try {
-          selectCoverKey.Value = info.FullName;
-          selectCoverSize.Value = info.Length;
-          selectCoverTime.Value = info.LastWriteTimeUtc.Ticks;
-          try {
-            data = selectCover.ExecuteScalar() as byte[];
-          }
-          catch (DbException ex) {
-            Error("Failed to lookup file cover from store", ex);
-            return null;
-          }
-        }
-        finally {
-          selectCover.Cancel();
-        }
-      }
-      if (data == null) {
-        return null;
-      }
-      try {
-        using (var s = new MemoryStream(data)) {
-          var ctx = new StreamingContext(
-            StreamingContextStates.Persistence,
-            new DeserializeInfo(null, info, DlnaMime.ImageJPEG)
-            );
-          var formatter = new BinaryFormatter(null, ctx)
-          {
-            TypeFormat = FormatterTypeStyle.TypesWhenNeeded,
-            AssemblyFormat = FormatterAssemblyStyle.Simple
-          };
-          var rv = formatter.Deserialize(s) as Cover;
-          return rv;
-        }
-      }
-      catch (SerializationException ex) {
-        Debug("Failed to deserialize a cover", ex);
-        return null;
-      }
-      catch (Exception ex) {
-        Fatal("Failed to deserialize a cover", ex);
-        throw;
-      }
+
+      /*      if (connection == null) {
+              return null;
+            }
+
+            var info = file.Item;
+            byte[] data;
+            lock (connection) {
+              try {
+                selectCoverKey.Value = info.FullName;
+                selectCoverSize.Value = info.Length;
+                selectCoverTime.Value = info.LastWriteTimeUtc.Ticks;
+                try {
+                  data = selectCover.ExecuteScalar() as byte[];
+                }
+                catch (DbException ex) {
+                  Error("Failed to lookup file cover from store", ex);
+                  return null;
+                }
+              }
+              finally {
+                selectCover.Cancel();
+              }
+            }
+            if (data == null) {
+              return null;
+            }
+            try {
+              using (var s = new MemoryStream(data)) {
+                var ctx = new StreamingContext(
+                  StreamingContextStates.Persistence,
+                  new DeserializeInfo(null, info, DlnaMime.ImageJPEG)
+                  );
+                var formatter = new BinaryFormatter(null, ctx)
+                {
+                  TypeFormat = FormatterTypeStyle.TypesWhenNeeded,
+                  AssemblyFormat = FormatterAssemblyStyle.Simple
+                };
+                var rv = formatter.Deserialize(s) as Cover;
+                return rv;
+              }
+            }
+            catch (SerializationException ex) {
+              Debug("Failed to deserialize a cover", ex);
+              return null;
+            }
+            catch (Exception ex) {
+              Fatal("Failed to deserialize a cover", ex);
+              throw;
+            }*/
+
     }
+
+
 
     internal BaseFile MaybeGetFile(FileServer server, FileInfo info,
       DlnaMime type)
     {
-      if (connection == null) {
+      // TODO: refactor to remove BinaryFormatter
+      throw new NotImplementedException();
+
+/*      if (connection == null) {
         return null;
       }
       byte[] data;
@@ -302,69 +312,76 @@ namespace NMaier.SimpleDlna.FileMediaServer
           return null;
         }
         throw;
-      }
+      }*/
+
     }
 
     internal void MaybeStoreFile(BaseFile file)
     {
-      if (connection == null) {
-        return;
-      }
-      if (!file.GetType().Attributes.HasFlag(TypeAttributes.Serializable)) {
-        return;
-      }
-      try {
-        using (var s = StreamManager.GetStream()) {
-          using (var c = StreamManager.GetStream()) {
-            var ctx = new StreamingContext(
-              StreamingContextStates.Persistence,
-              null
-              );
-            var formatter = new BinaryFormatter(null, ctx)
-            {
-              TypeFormat = FormatterTypeStyle.TypesWhenNeeded,
-              AssemblyFormat = FormatterAssemblyStyle.Simple
-            };
-            formatter.Serialize(s, file);
-            Cover cover = null;
+      // TODO: refactor to remove BinaryFormatter
+      throw new NotImplementedException();
+
+      /*      if (connection == null) {
+              return;
+            }
+            if (!file.GetType().Attributes.HasFlag(TypeAttributes.Serializable)) {
+              return;
+            }
             try {
-              cover = file.MaybeGetCover();
-              if (cover != null) {
-                formatter.Serialize(c, cover);
+              using (var s = StreamManager.GetStream()) {
+                using (var c = StreamManager.GetStream()) {
+                  var ctx = new StreamingContext(
+                    StreamingContextStates.Persistence,
+                    null
+                    );
+                  var formatter = new BinaryFormatter(null, ctx)
+                  {
+                    TypeFormat = FormatterTypeStyle.TypesWhenNeeded,
+                    AssemblyFormat = FormatterAssemblyStyle.Simple
+                  };
+                  formatter.Serialize(s, file);
+                  Cover cover = null;
+                  try {
+                    cover = file.MaybeGetCover();
+                    if (cover != null) {
+                      formatter.Serialize(c, cover);
+                    }
+                  }
+                  catch (NotSupportedException) {
+                    // Ignore and store null.
+                  }
+
+                  lock (connection) {
+                    using (var trans = connection.BeginTransaction()) {
+                      insertKey.Value = file.Item.FullName;
+                      insertSize.Value = file.Item.Length;
+                      insertTime.Value = file.Item.LastWriteTimeUtc.Ticks;
+                      insertData.Value = s.ToArray();
+
+                      insertCover.Value = null;
+                      if (cover != null) {
+                        insertCover.Value = c.ToArray();
+                      }
+                      try {
+                        insert.Transaction = trans;
+                        insert.ExecuteNonQuery();
+                        trans.Commit();
+                      }
+                      catch (DbException ex) {
+                        Error("Failed to put file cover into store", ex);
+                      }
+                    }
+                  }
+                }
               }
             }
-            catch (NotSupportedException) {
-              // Ignore and store null.
+            catch (Exception ex) {
+              Error("Failed to serialize an object of type " + file.GetType(), ex);
+              throw;
             }
+          }*/
 
-            lock (connection) {
-              using (var trans = connection.BeginTransaction()) {
-                insertKey.Value = file.Item.FullName;
-                insertSize.Value = file.Item.Length;
-                insertTime.Value = file.Item.LastWriteTimeUtc.Ticks;
-                insertData.Value = s.ToArray();
-
-                insertCover.Value = null;
-                if (cover != null) {
-                  insertCover.Value = c.ToArray();
-                }
-                try {
-                  insert.Transaction = trans;
-                  insert.ExecuteNonQuery();
-                  trans.Commit();
-                }
-                catch (DbException ex) {
-                  Error("Failed to put file cover into store", ex);
-                }
-              }
-            }
-          }
-        }
-      }
-      catch (Exception ex) {
-        Error("Failed to serialize an object of type " + file.GetType(), ex);
-        throw;
-      }
     }
+
   }
 }
