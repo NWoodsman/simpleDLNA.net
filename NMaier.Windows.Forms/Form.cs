@@ -34,8 +34,12 @@ namespace NMaier.Windows.Forms
         true);
     }
 
+    // TODO: confirm these attributes don't have additional side effects. Intellisense suggested these fixes. 
+
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public virtual Font BoldFont { get; set; }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public virtual Font ItalicFont { get; set; }
 
     public static void SetFlatStyle(object control)
