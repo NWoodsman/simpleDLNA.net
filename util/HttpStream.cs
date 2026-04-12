@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -186,7 +186,10 @@ namespace NMaier.SimpleDlna.Utilities
       }
       request.AllowAutoRedirect = true;
       request.Timeout = TIMEOUT * 1000;
-      request.UserAgent = UserAgent;
+      //TODO: confirm this is acceptable code. It builds but used to be:
+      //  request.UserAgent = UserAgent;
+      // it appears the framework moved the property to a dictionary but this needs more investigation before declaring OK
+      request.Headers["User-Agent"] = UserAgent;
       if (offset > 0) {
         request.AddRange(offset);
       }
