@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/.nuget/">
+    <File Path=".nuget/NuGet.Config" />
+    <File Path=".nuget/NuGet.exe" />
+    <File Path=".nuget/NuGet.targets" />
+  </Folder>
+  <Folder Name="/Global/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="GlobalAssemblyInfo.cs" />
+    <File Path="NgenInstaller.cs" />
+  </Folder>
+  <Project Path="fsserver/fsserver.csproj" />
+  <Project Path="NMaier.Windows.Forms/NMaier.Windows.Forms.csproj" />
+  <Project Path="sdlna/sdlna.csproj" />
+  <Project Path="server/server.csproj" />
+  <Project Path="SimpleDLNA/SimpleDLNA.csproj" />
+  <Project Path="thumbs/thumbs.csproj" />
+  <Project Path="util/util.csproj" />
+</Solution>
