@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs" Link="Properties\GlobalAssemblyInfo.cs" />
-    <Compile Include="..\NgenInstaller.cs" Link="NgenInstaller.cs" />
     <Compile Update="FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>
