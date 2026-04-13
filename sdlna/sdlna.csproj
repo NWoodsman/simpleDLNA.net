@@ -53,7 +53,6 @@
   <ItemGroup>
     <PackageReference Include="GetOptNet" Version="4.0.8" />
     <PackageReference Include="log4net" Version="3.3.0" />
-    <PackageReference Include="Stub.System.Data.SQLite.Core.NetFramework" Version="1.0.119.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119.0" />
     <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" Version="2.3.0" />
