@@ -9,6 +9,7 @@
     <File Path=".gitignore" />
     <File Path="GlobalAssemblyInfo.cs" />
   </Folder>
+  <Project Path="../TestSimpleDLNA/TestSimpleDLNA.csproj" Id="1d37be8f-35a4-4fd3-9482-a2df2f8ef19c" />
   <Project Path="fsserver/fsserver.csproj" />
   <Project Path="NMaier.Windows.Forms/NMaier.Windows.Forms.csproj" />
   <Project Path="sdlna/sdlna.csproj" />

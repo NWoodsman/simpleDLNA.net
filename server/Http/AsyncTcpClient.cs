@@ -19,24 +19,25 @@ public class AsyncTcpClient
   // When it detects 
   public async Task SpinAsync()
   {
-    byte[] buffer = new byte[1024];
+
+    ResponseBuffer rb = new ResponseBuffer();
 
     try
     {
       while (!token.IsCancellationRequested)
       {
-        int received_byte_count = await socket.ReceiveAsync(buffer, SocketFlags.None, token);
+        int received_byte_count = await socket.ReceiveAsync(rb.Buffer, SocketFlags.None, token);
 
         if (received_byte_count == 0)
         {
           break; // client disconnected
         }
 
-        string text = Encoding.UTF8.GetString(buffer, 0, received_byte_count);
-        Console.WriteLine($"Received: {text}");
+        rb.Parse();
 
-        string response = "Echo: " + text;
-        await client.SendAsync(Encoding.UTF8.GetBytes(response), SocketFlags.None, token);
+        throw new NotImplementedException();
+        //sstring response = "Echo: " + text;
+        //await socket.SendAsync(Encoding.UTF8.GetBytes(response), SocketFlags.None, token);
       }
     }
     catch (OperationCanceledException)
@@ -50,7 +51,7 @@ public class AsyncTcpClient
     finally
     {
       Console.WriteLine("Client disconnected");
-      client.Close();
+      socket.Close();
     }
 
   }

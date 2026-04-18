@@ -32,7 +32,6 @@
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="log4net" Version="3.3.0" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
-    <PackageReference Include="Stub.System.Data.SQLite.Core.NetFramework" Version="1.0.119.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119.0" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters" Version="2.3.0" />
