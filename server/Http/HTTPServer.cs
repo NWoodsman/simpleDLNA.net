@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Timers;
 using log4net;
+using NMaier.SimpleDlna.Server.Http;
 using NMaier.SimpleDlna.Server.Ssdp;
 using NMaier.SimpleDlna.Utilities;
 
@@ -16,8 +17,8 @@ namespace NMaier.SimpleDlna.Server
   {
     public static readonly string Signature = GenerateServerSignature();
 
-    private readonly ConcurrentDictionary<HttpClient, DateTime> clients =
-      new ConcurrentDictionary<HttpClient, DateTime>();
+    private readonly ConcurrentDictionary<IHttpClient, DateTime> clients =
+      new ConcurrentDictionary<IHttpClient, DateTime>();
 
     private readonly ConcurrentDictionary<Guid, List<Guid>> devicesForServers =
       new ConcurrentDictionary<Guid, List<Guid>>();
@@ -55,7 +56,7 @@ namespace NMaier.SimpleDlna.Server
 
       listener = new TcpListener(new IPEndPoint(IPAddress.Any, port));
       listener.Server.Ttl = 32;
-      listener.Server.UseOnlyOverlappedIO = true;
+
       listener.Start();
 
       RealPort = ((IPEndPoint)listener.LocalEndpoint).Port;
@@ -120,7 +121,10 @@ namespace NMaier.SimpleDlna.Server
     {
       try {
         var tcpclient = listener.EndAcceptTcpClient(result);
-        var client = new HttpClient(this, tcpclient);
+
+
+
+        var client = IHttpClient.Create(this, tcpclient);
         try {
           clients.AddOrUpdate(client, DateTime.Now, (k, v) => DateTime.Now);
           DebugFormat("Accepted client {0}", client);
@@ -176,7 +180,7 @@ namespace NMaier.SimpleDlna.Server
       }
     }
 
-    internal bool AuthorizeClient(HttpClient client)
+    internal bool AuthorizeClient(IHttpClient client)
     {
       if (OnAuthorizeClient == null) {
         return true;
@@ -226,7 +230,7 @@ namespace NMaier.SimpleDlna.Server
       DebugFormat("Registered Handler for {0}", prefix);
     }
 
-    internal void RemoveClient(HttpClient client)
+    internal void RemoveClient(IHttpClient client)
     {
       DateTime ignored;
       clients.TryRemove(client, out ignored);

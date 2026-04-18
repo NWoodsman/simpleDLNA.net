@@ -4,11 +4,12 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using NMaier.SimpleDlna.Server.Http;
 using NMaier.SimpleDlna.Utilities;
 
 namespace NMaier.SimpleDlna.Server
 {
-  internal sealed class HttpClient : Logging, IRequest, IDisposable
+  internal sealed class HttpClient : Logging, IRequest, IDisposable,IHttpClient
   {
     private const uint BEGIN_TIMEOUT = 30;
 
@@ -414,7 +415,7 @@ namespace NMaier.SimpleDlna.Server
       SendResponse();
     }
 
-    internal void Close()
+    public void Close()
     {
       State = HttpStates.Closed;
 
