@@ -105,8 +105,7 @@ namespace NMaier.SimpleDlna
         options.SetupLogging();
 
         using (new ProgramIcon()) {
-          var server = new HttpServer(options.Port);
-          //var server = new AsyncTcpServer(options.Port);
+         var server = new AsyncTcpServer(options.Port);
           try {
             using (var authorizer = new HttpAuthorizer(server)) {
               if (options.Ips.Length != 0) {
@@ -152,9 +151,8 @@ namespace NMaier.SimpleDlna
 
               Console.Title = $"{friendlyName} - running ...";
 
-              //await server.StartAsync(ts.Token);
+              await server.StartAsync(ts.Token);
 
-              Run(server);
             }
           }
           catch(TaskCanceledException te)
@@ -176,15 +174,6 @@ namespace NMaier.SimpleDlna
         LogManager.GetLogger(typeof (Program)).Fatal("Failed to run", ex);
       }
 #endif
-    }
-
-    private static void Run(HttpServer server)
-    {
-      server.Info("CTRL-C to terminate");
-      blockEvent.WaitOne();
-
-      server.Info("Going down!");
-      server.Info("Closed!");
     }
 
     private static FileServer SetupFileServer(Options options,
