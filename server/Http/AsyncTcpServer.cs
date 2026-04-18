@@ -137,53 +137,26 @@ new ConcurrentDictionary<Guid, MediaMount>();
             select prefixes[s]).FirstOrDefault();
   }
 
-  public async Task StartAsync(CancellationToken token = default)
+  public async Task StartAsync(CancellationToken token)
   {
     Console.WriteLine("Server listening...");
 
+    // this loop has no temporal context. It continues infinitely and only does something when called
+    // which is to say awaiting the socket 
     while (!token.IsCancellationRequested)
     {
-      Socket client = await _listener.AcceptAsync(token);
+      // need to spin the client off into its own class? 
+
+      Socket client_socket = await _listener.AcceptAsync(token);
       Console.WriteLine("Client connected");
 
-      _ = HandleClientAsync(client, token);
+      AsyncTcpClient client = new(client_socket, token);
+
+      _ = client.SpinAsync();
+
     }
   }
 
-  private async Task HandleClientAsync(Socket client, CancellationToken token)
-  {
-    byte[] buffer = new byte[1024];
-
-    try
-    {
-      while (!token.IsCancellationRequested)
-      {
-        int received = await client.ReceiveAsync(buffer, SocketFlags.None, token);
-
-        if (received == 0)
-          break; // client disconnected
-
-        string text = Encoding.UTF8.GetString(buffer, 0, received);
-        Console.WriteLine($"Received: {text}");
-
-        string response = "Echo: " + text;
-        await client.SendAsync(Encoding.UTF8.GetBytes(response), SocketFlags.None, token);
-      }
-    }
-    catch (OperationCanceledException)
-    {
-      // Server shutting down
-    }
-    catch (SocketException ex)
-    {
-      Console.WriteLine($"Socket error: {ex.Message}");
-    }
-    finally
-    {
-      Console.WriteLine("Client disconnected");
-      client.Close();
-    }
-  }
   private static string GenerateServerSignature()
   {
     var os = Environment.OSVersion;
