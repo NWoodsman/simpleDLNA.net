@@ -26,6 +26,9 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisRuleSet>..\sdlna.ruleset</CodeAnalysisRuleSet>
     <SignAssembly>true</SignAssembly>
+    <Nullable>enable</Nullable>
+
+    
     <AssemblyOriginatorKeyFile>sdlna.key.snk</AssemblyOriginatorKeyFile>
     <ApplicationIcon>sdlna.ico</ApplicationIcon>
   </PropertyGroup>
