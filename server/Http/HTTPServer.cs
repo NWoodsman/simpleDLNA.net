@@ -13,7 +13,7 @@ using NMaier.SimpleDlna.Utilities;
 
 namespace NMaier.SimpleDlna.Server
 {
-  public sealed class HttpServer : Logging, IDisposable
+  public sealed class HttpServer : Logging, IHttpServer, IDisposable
   {
     public static readonly string Signature = GenerateServerSignature();
 
@@ -31,9 +31,13 @@ namespace NMaier.SimpleDlna.Server
     private readonly ConcurrentDictionary<Guid, MediaMount> servers =
       new ConcurrentDictionary<Guid, MediaMount>();
 
-    private readonly SsdpHandler ssdpServer;
+     SsdpHandler ssdpServer { get; }
 
     private readonly Timer timeouter = new Timer(10 * 1000);
+
+    public IEnumerable<(string, string)> MediaMounts => servers.Select(x => (x.Value.Prefix, x.Value.FriendlyName));
+
+    public event EventHandler<HttpAuthorizationEventArgs> OnAuthorizeClient;
 
     public HttpServer()
       : this(0)
@@ -71,17 +75,6 @@ namespace NMaier.SimpleDlna.Server
       Accept();
     }
 
-    public Dictionary<string, string> MediaMounts
-    {
-      get {
-        var rv = new Dictionary<string, string>();
-        foreach (var m in servers) {
-          rv[m.Value.Prefix] = m.Value.FriendlyName;
-        }
-        return rv;
-      }
-    }
-
     public int RealPort { get; }
 
     public void Dispose()
@@ -100,7 +93,6 @@ namespace NMaier.SimpleDlna.Server
       clients.Clear();
     }
 
-    public event EventHandler<HttpAuthorizationEventArgs> OnAuthorizeClient;
 
     private void Accept()
     {

@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NMaier.SimpleDlna.Utilities;
+using NMaier.SimpleDlna.Server.Http;
+
 
 namespace NMaier.SimpleDlna.Server
 {
@@ -12,13 +14,13 @@ namespace NMaier.SimpleDlna.Server
     private readonly List<IHttpAuthorizationMethod> methods =
       new List<IHttpAuthorizationMethod>();
 
-    private readonly HttpServer server;
+    private readonly IHttpServer server;
 
     public HttpAuthorizer()
     {
     }
 
-    public HttpAuthorizer(HttpServer server)
+    public HttpAuthorizer(IHttpServer server)
     {
       if (server == null) {
         throw new ArgumentNullException(nameof(server));

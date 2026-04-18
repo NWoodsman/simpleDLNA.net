@@ -1,14 +1,17 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+
 using log4net;
 using NMaier.GetOptNet;
 using NMaier.SimpleDlna.FileMediaServer;
 using NMaier.SimpleDlna.Properties;
 using NMaier.SimpleDlna.Server;
 using NMaier.SimpleDlna.Server.Comparers;
+using NMaier.SimpleDlna.Server.Http;
 using NMaier.SimpleDlna.Server.Views;
 using NMaier.SimpleDlna.Utilities;
 
@@ -16,6 +19,8 @@ namespace NMaier.SimpleDlna
 {
   public static class Program
   {
+    static CancellationTokenSource ts = new CancellationTokenSource();
+
     private static readonly ManualResetEvent blockEvent =
       new ManualResetEvent(false);
 
@@ -63,8 +68,9 @@ namespace NMaier.SimpleDlna
       }
     }
 
-    private static void Main(string[] args)
+    static async Task Main(string[] args)
     {
+
       Console.WriteLine();
       var options = new Options();
       try {
@@ -100,6 +106,7 @@ namespace NMaier.SimpleDlna
 
         using (new ProgramIcon()) {
           var server = new HttpServer(options.Port);
+          //var server = new AsyncTcpServer(options.Port);
           try {
             using (var authorizer = new HttpAuthorizer(server)) {
               if (options.Ips.Length != 0) {
@@ -118,39 +125,44 @@ namespace NMaier.SimpleDlna
               var types = options.Types[0];
               foreach (var t in options.Types) {
                 types = types | t;
-                server.InfoFormat("Enabled type {0}", t);
+                server.InfoFormat($"Enabled type {t}");
               }
 
               var friendlyName = "sdlna";
 
               if (options.Seperate) {
                 foreach (var d in options.Directories) {
-                  server.InfoFormat("Mounting FileServer for {0}", d.FullName);
+                  server.InfoFormat($"Mounting FileServer for {d.FullName}");
                   var fs = SetupFileServer(
                     options, types, new[] {d});
                   friendlyName = fs.FriendlyName;
                   server.RegisterMediaServer(fs);
-                  server.NoticeFormat("{0} mounted", d.FullName);
+                  server.NoticeFormat($"{d.FullName} mounted.");
                 }
               }
               else {
                 server.InfoFormat(
-                  "Mounting FileServer for {0} ({1})",
-                  options.Directories[0], options.Directories.Length);
+                  $"Mounting FileServer for {options.Directories[0]} ({options.Directories.Length})");
                 var fs = SetupFileServer(options, types, options.Directories);
                 friendlyName = fs.FriendlyName;
                 server.RegisterMediaServer(fs);
                 server.NoticeFormat(
-                  "{0} ({1}) mounted",
-                  options.Directories[0], options.Directories.Length);
+                  $"{options.Directories[0]} ({options.Directories.Length}) mounted.");
               }
 
               Console.Title = $"{friendlyName} - running ...";
 
+              //await server.StartAsync(ts.Token);
+
               Run(server);
             }
           }
-          finally {
+          catch(TaskCanceledException te)
+          {
+            Console.WriteLine($"Server execution cancelled: {te.Message}");
+          }
+          finally
+          {
             server.Dispose();
           }
         }
