@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <ProductVersion>8.0.30703</ProductVersion>
-    <RootNamespace>NMaier.SimpleDlna.FileMediaServer</RootNamespace>
-    <AssemblyName>SimpleDlna.FileMediaServer</AssemblyName>
+    <RootNamespace>NMaier.SimpleDlna.Server</RootNamespace>
+    <AssemblyName>SimpleDlna.Server</AssemblyName>
     <TargetFramework>net9.0-windows</TargetFramework>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -15,9 +15,9 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
     <CodeAnalysisRuleSet>..\sdlna.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -28,20 +28,46 @@
   </Target>
   <ItemGroup>
     <PackageReference Include="log4net" Version="3.3.0" />
-    <PackageReference Include="taglib" Version="2.1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" Version="2.3.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.5" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GlobalAssemblyInfo.cs" Link="Properties\GlobalAssemblyInfo.cs" />
+    <Compile Update="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\server\server.csproj" />
-    <ProjectReference Include="..\thumbs\thumbs.csproj" />
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\contentdirectory.xml" />
+    <None Include="Resources\description.xml" />
+    <None Include="sdlna.key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\browse.css" />
+    <None Include="Resources\connectionmanager.xml" />
+    <None Include="Resources\MSMediaReceiverRegistrar.xml" />
+    <Content Include="Resources\large.jpg" />
+    <Content Include="Resources\large.png" />
+    <Content Include="Resources\small.jpg" />
+    <Content Include="Resources\small.png" />
+    <Content Include="Resources\x_featurelist.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\util\util.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="sdlna.key.snk" />
+    <Compile Remove="Types\MediaTypes.cs" />
   </ItemGroup>
 </Project>

@@ -4,16 +4,11 @@
     <File Path=".nuget/NuGet.exe" />
     <File Path=".nuget/NuGet.targets" />
   </Folder>
-  <Folder Name="/Global/">
-    <File Path=".editorconfig" />
-    <File Path=".gitignore" />
-    <File Path="GlobalAssemblyInfo.cs" />
-  </Folder>
-  <Project Path="fsserver/fsserver.csproj" />
-  <Project Path="NMaier.Windows.Forms/NMaier.Windows.Forms.csproj" />
-  <Project Path="sdlna/sdlna.csproj" />
-  <Project Path="server/server.csproj" />
-  <Project Path="SimpleDLNA/SimpleDLNA.csproj" />
-  <Project Path="thumbs/thumbs.csproj" />
-  <Project Path="util/util.csproj" />
+  <Project Path="src/fsserver/fsserver.csproj" />
+  <Project Path="src/NMaier.Windows.Forms/NMaier.Windows.Forms.csproj" />
+  <Project Path="src/sdlna/sdlna.csproj" />
+  <Project Path="src/server/server.csproj" />
+  <Project Path="src/SimpleDLNA/SimpleDLNA.csproj" />
+  <Project Path="src/thumbs/thumbs.csproj" />
+  <Project Path="src/util/util.csproj" />
 </Solution>
