@@ -24,7 +24,6 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <CodeAnalysisRuleSet>..\sdlna.ruleset</CodeAnalysisRuleSet>
     <ApplicationIcon>sdlna.ico</ApplicationIcon>
     <SignAssembly>true</SignAssembly>

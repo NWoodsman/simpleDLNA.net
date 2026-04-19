@@ -6,7 +6,6 @@
     <TargetFramework>net9.0-windows</TargetFramework>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sdlna.key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>

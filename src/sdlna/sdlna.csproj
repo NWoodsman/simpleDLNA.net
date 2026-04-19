@@ -33,12 +33,10 @@
     <ApplicationIcon>sdlna.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <DebugType>full</DebugType>
     <CodeAnalysisLogFile>bin\Debug\sdnla.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>D:\bin\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <CodeAnalysisLogFile>bin\Release\sdnla.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>

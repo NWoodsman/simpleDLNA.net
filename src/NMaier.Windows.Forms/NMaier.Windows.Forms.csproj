@@ -9,7 +9,6 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <Deterministic>false</Deterministic>
     <AssemblyVersion>1.0.*</AssemblyVersion>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>NMaier.Windows.Forms.snk</AssemblyOriginatorKeyFile>
     <UseWindowsForms>true</UseWindowsForms>
